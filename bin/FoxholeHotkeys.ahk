@@ -6,37 +6,64 @@ SetWorkingDir, %A_ScriptDir%
 ; Foxhole Hotkeys - GUI Version - by Tommythebold            ;
 ;------------------------------------------------------------;
 ; Default key bindings are:									 ;
-; F2 - Spam Left Click at Location                           ;
+; F2 - Spam Left Click at Location (holds Shift)             ;
 ; F3 - Hold W                                                ;
 ; F4 - Hold S                                                ;
 ; F5 - Hold Right Click                                      ;
 ; F6 - Hold Left Click                                       ;
 ; F7 - Suspend Program                                       ;
 ; F9 - Exit Program                                          ;
-; All hotkeys work while tabbed out.                         ;
+; 9  - Auto Arty Reloader                                    ;
+; 0  - Auto Border Base Camping                              ;
+; While Hold W is active it also spams the Open Gate key     ;
+; ([Keys] Open Gate Key, default N).                         ;
+; Most hotkeys work tabbed out; Auto Arty/Border Base send   ;
+; to the focused window (keep Foxhole focused for those).    ;
 ;------------------------------------------------------------;
 ; If you want to manually change keybinds, use the           ;
 ; FoxholeHotkeysManual version in the bin folder.            ;
 ; https://github.com/Tommythebold/Foxhole-AutoClicker        ;
 ;------------------------------------------------------------;
 
-IniRead, HoldW, KeyBindings.ini, Hotkeys, Hold W
-IniRead, HoldS, KeyBindings.ini, Hotkeys, Hold S
-IniRead, HoldLeft, KeyBindings.ini, Hotkeys, Hold Left
-IniRead, HoldRight, KeyBindings.ini, Hotkeys, Hold Right
-IniRead, SpamLeft, KeyBindings.ini, Hotkeys, Spam Left
-IniRead, SpamLeftBuild, KeyBindings.ini, Hotkeys, Spam Left Build
-IniRead, Suspend, KeyBindings.ini, Hotkeys, Suspend
-IniRead, Close, KeyBindings.ini, Hotkeys, Close
+; Each read has a default (last arg) so a missing/old KeyBindings.ini
+; still works instead of leaving a blank key that would break loading.
+IniRead, HoldW, KeyBindings.ini, Hotkeys, Hold W, F3
+IniRead, HoldS, KeyBindings.ini, Hotkeys, Hold S, F4
+IniRead, HoldLeft, KeyBindings.ini, Hotkeys, Hold Left, F7
+IniRead, HoldRight, KeyBindings.ini, Hotkeys, Hold Right, F6
+IniRead, SpamLeft, KeyBindings.ini, Hotkeys, Spam Left, F2
+IniRead, SpamLeftBuild, KeyBindings.ini, Hotkeys, Spam Left Build, F5
+IniRead, AutoArty, KeyBindings.ini, Hotkeys, Auto Arty Reload, 9
+IniRead, AutoBorder, KeyBindings.ini, Hotkeys, Auto Border Base, 0
+IniRead, Suspend, KeyBindings.ini, Hotkeys, Suspend, F9
+IniRead, Close, KeyBindings.ini, Hotkeys, Close, F10
+IniRead, OpenGateKey, KeyBindings.ini, Keys, Open Gate Key, n
 
-Hotkey, %HoldW%, Hold_W
-Hotkey, %HoldS%, Hold_S
-Hotkey, %HoldRight%, Hold_Right
-Hotkey, %HoldLeft%, Hold_Left
-Hotkey, %SpamLeft%, Spam_Left
-Hotkey, %SpamLeftBuild%, Spam_Left_Build
-Hotkey, %Suspend%, Key_Suspend
-Hotkey, %Close%, Key_Close
+; Guard each registration: one bad/blank key disables only that hotkey,
+; never halts the whole script (which would kill every hotkey).
+if (HoldW != "")
+	Hotkey, %HoldW%, Hold_W
+if (HoldS != "")
+	Hotkey, %HoldS%, Hold_S
+if (HoldRight != "")
+	Hotkey, %HoldRight%, Hold_Right
+if (HoldLeft != "")
+	Hotkey, %HoldLeft%, Hold_Left
+if (SpamLeft != "")
+	; '*' wildcard: fire even while modifiers are held. Required because this
+	; hotkey holds Left Shift down itself - without '*', the toggle-off press
+	; registers as Shift+<key> and would never match to stop the loop.
+	Hotkey, *%SpamLeft%, Spam_Left
+if (SpamLeftBuild != "")
+	Hotkey, %SpamLeftBuild%, Spam_Left_Build
+if (AutoArty != "")
+	Hotkey, %AutoArty%, Auto_Arty_Reload
+if (AutoBorder != "")
+	Hotkey, %AutoBorder%, Auto_Border_Base
+if (Suspend != "")
+	Hotkey, %Suspend%, Key_Suspend
+if (Close != "")
+	Hotkey, %Close%, Key_Close
 return
 
 ;-----------------------------;
@@ -46,9 +73,24 @@ return
 Spam_Left:
 MouseGetPos, xpos, ypos
 T := !T
-While (T) {
-	ControlClick, X%xpos% Y%ypos%, ahk_class UnrealWindow, , Left, 1
-	sleep, 100
+if (T) {
+	; Hold Left Shift down with a REAL key event (SendInput) for the whole spam
+	; loop. The game reads held-modifier state from the OS keyboard state
+	; (GetAsyncKeyState), which a posted ControlSend message does NOT update -
+	; so a real Send is required. NOTE: this means Foxhole must be focused for
+	; the Shift hold to register (the clicks themselves are still posted).
+	; Released when toggled off below.
+	Send {LShift down}
+	While (T) {
+		; Also set the Shift bit in wParam so the click itself carries the
+		; modifier. MK_LBUTTON=0x1, MK_SHIFT=0x4. ControlClick can't carry a
+		; modifier, so we PostMessage like the "Spam Left Building" feature does.
+		PostMessage, 0x200, 0x0004, (xpos & 0xFFFF) | (ypos << 16), , ahk_class UnrealWindow ; WM_MOUSEMOVE + Shift
+		PostMessage, 0x201, 0x0005, (xpos & 0xFFFF) | (ypos << 16), , ahk_class UnrealWindow ; WM_LBUTTONDOWN + Shift
+		PostMessage, 0x202, 0x0004, (xpos & 0xFFFF) | (ypos << 16), , ahk_class UnrealWindow ; WM_LBUTTONUP + Shift
+		sleep, 100
+	}
+	Send {LShift up}
 }
 return
 
@@ -91,23 +133,29 @@ While (T) {
 ControlClick, X%xpos% Y%ypos%, ahk_class UnrealWindow, , Right, 1, u
 return
 
-;---------;
-; Hold W  ;
-;---------;
+;----------------------------;
+; Hold W (+ spam Open Gate)   ;
+;----------------------------;
 
 Hold_W:
 toggle := !toggle
 ControlSend,,{w down}, ahk_class UnrealWindow
 if (toggle) {
 	SetTimer, PressW, 1000
+	SetTimer, SpamGate, 100
 }	else {
 	SetTimer, PressW, Off
+	SetTimer, SpamGate, Off
 	ControlSend,,{w up}, ahk_class UnrealWindow
 }
 return
 
 PressW:
 ControlSend,,{w down}, ahk_class UnrealWindow
+return
+
+SpamGate:
+ControlSend,,{%OpenGateKey%}, ahk_class UnrealWindow
 return
 
 ;--------;
@@ -143,3 +191,33 @@ return
 
 Key_Close:
 ExitApp
+return
+
+;---------------------;
+; Auto Arty Reloader  ;
+;---------------------;
+; Sends to the focused window (keep Foxhole focused).
+
+Auto_Arty_Reload:
+artyToggle := !artyToggle
+While (artyToggle) {
+	Send, {r down}
+	Send, {r up}
+	Click, Left
+	sleep, 200
+}
+return
+
+;--------------------------;
+; Auto Border Base Camping ;
+;--------------------------;
+; Sends to the focused window (keep Foxhole focused).
+
+Auto_Border_Base:
+borderToggle := !borderToggle
+While (borderToggle) {
+	Send, {E down}
+	Send, {E up}
+	sleep, 20
+}
+return
