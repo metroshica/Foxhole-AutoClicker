@@ -18,8 +18,40 @@
 
 </div>
 
-# How to Install
-This program requires you to install [AutoHotKey](https://www.autohotkey.com/) v1. 
+## About
+
+Foxhole AutoClicker is a small AutoHotkey program that provides hotkeys which work **while tabbed out** — you can use your mouse and keyboard freely while they're active. Every hotkey is a single-action autoclicker custom-made for Foxhole and permitted under the game's Terms of Service.
+
+## Contents
+
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+  - [Default keybinds](#default-keybinds)
+  - [Changing keybinds](#changing-keybinds)
+- [Running without the GUI](#running-without-the-gui)
+- [Troubleshooting](#troubleshooting)
+- [Changelog](#changelog)
+- [Contact](#contact)
+- [Credits](#credits)
+
+## Features
+
+| Hotkey | What it does |
+| --- | --- |
+| **Spam Left Click at location** | Simulates clicks at the spot where you pressed the hotkey. **Holds Shift down** the whole time it spams (for pulling full stacks) and releases it when you toggle off. |
+| **Hold W / Hold S** | Holds forward / backward movement. **Hold W** also spams your **Open Gate** key so gates open automatically as you run through them. |
+| **Hold Right Click** | For rotating cranes, binoculars, and aiming. |
+| **Hold Left Click** | For harvesters and building. |
+| **Spam Left Building** | Build with a hammer/shovel/etc. without your character turning as the mouse moves. |
+| **Auto Arty Reloader** | Spams reload (R) + left click to keep an artillery piece firing and reloading. |
+| **Auto Border Base Camping** | Spams E. |
+
+> **Note:** Spam Left Click, Auto Arty Reloader, and Auto Border Base Camping use real key/click input, so keep Foxhole focused while using them. The remaining hotkeys work while tabbed out.
+
+## Installation
+
+This program requires [AutoHotkey **v1.1**](https://www.autohotkey.com/download/ahk-install.exe) — install it first.
 
 To install the program itself, head to the [Releases page](https://github.com/metroshica/Foxhole-AutoClicker/releases) on the right-hand side of this page. Download the most recent release, which will be a zip file named FoxholeAutoClicker. Drag the folder inside anywhere on your PC. To launch the GUI, double click the Foxhole AutoClicker file. 
 
