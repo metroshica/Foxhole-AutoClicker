@@ -16,12 +16,12 @@ The following features are available:
 * **v2.0 - Auto Border Base Camping (default `0`) -** spams E. *(These two send to the focused window, so keep Foxhole focused when using them.)*
 
   
-![image](https://github.com/Tommythebold/Foxhole-AutoClicker/assets/11021249/62f07a9e-00e4-427e-877e-092ff3e59e25)   ![image](https://github.com/Tommythebold/Foxhole-AutoClicker/assets/11021249/3377e997-95a1-4591-b1fa-9c386a36b187)
+<img src="images/main-gui.png" alt="Main GUI" width="240"> &nbsp; <img src="images/change-keybinds.png" alt="Change Keybinds page" width="300">
 
 # How to Install
 This program requires you to install [AutoHotKey](https://www.autohotkey.com/) v1. 
 
-To install the program itself, head to the [Releases page](https://github.com/Tommythebold/foxholeautoclicker/releases) on the right-hand side of this page. Download the most recent release, which will be a zip file named FoxholeAutoClicker. Drag the folder inside anywhere on your PC. To launch the GUI, double click the Foxhole AutoClicker file. 
+To install the program itself, head to the [Releases page](https://github.com/metroshica/Foxhole-AutoClicker/releases) on the right-hand side of this page. Download the most recent release, which will be a zip file named FoxholeAutoClicker. Drag the folder inside anywhere on your PC. To launch the GUI, double click the Foxhole AutoClicker file. 
 
 # How to Use
 The program comes with default keybinds, but these can easily be changed by clicking the 'Change Keybinds' button in the program. Each row shows its current key on a button — click that key, then press the key/key combination of your choice (press **Esc** to cancel). Any modifiers or extra keys (shift, alt, mouse buttons, etc.) will work. The **Reset Defaults** button restores every bind to the defaults below.
@@ -47,9 +47,9 @@ v2.0 - Added two new hotkeys: Auto Arty Reloader (default `9`, spams R + left cl
 
 v1.3 - F2 (Spam Left Click) now holds Shift while spamming. Hold W (F3) now also spams a configurable "Open Gate" key (default N) the whole time W is held, so gates open automatically as you run through - set the key with the GUI's "Set In-Game Open Gate Key (Hold W)" button or in `bin/KeyBindings.ini` under `[Keys] Open Gate Key`. All keybinds now fall back to their defaults if missing from the ini, so an old KeyBindings.ini won't break the hotkeys.
 
-v1.2 - Now allows you to use the Shift key while W/S hotkeys are active, which was previously impossible. This means you can now type capital letters and more. Some shift key presses may miss, and the character will stop holding W/S for about half a second on tab out, but it is still a significant improvement. If you don't agree, please let me know. Feature requested by Saturnda and others.
+v1.2 - Now allows you to use the Shift key while W/S hotkeys are active, which was previously impossible. This means you can now type capital letters and more. Some shift key presses may miss, and the character will stop holding W/S for about half a second on tab out, but it is still a significant improvement.
 
-v1.1 - Adds the "Spam Left Building" key. This key allows you to build with a hammer/shovel/etc without your character changing direction when your mouse moves. Requested by Saturnda.
+v1.1 - Adds the "Spam Left Building" key. This key allows you to build with a hammer/shovel/etc without your character changing direction when your mouse moves.
 
 v1.0 - Initial release.
 
@@ -62,4 +62,7 @@ v1.0 - Initial release.
 * If you are familiar with AutoHotKey, or don't want to bother with the GUI at all, there is a 'manual' version of the script in the \bin folder. You can `right click > edit with ...` the FoxholeHotkeysManual script to set keybinds manually. There are instructions in the comments of the script on how to do so.
 
 # Contact
-If you have any questions, issues, or feature requests, you can open an issue on this GitHub page, or message me on Discord (tommythebold).
+If you have any questions, issues, or feature requests, you can open an issue on this GitHub page.
+
+# Credits
+This is a fork of the original [Foxhole AutoClicker by Tommythebold](https://github.com/Tommythebold/Foxhole-AutoClicker). Big thanks to Tommythebold for creating and maintaining the original tool that this builds on.
