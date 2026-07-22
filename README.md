@@ -53,48 +53,63 @@ Foxhole AutoClicker is a small AutoHotkey program that provides hotkeys which wo
 
 This program requires [AutoHotkey **v1.1**](https://www.autohotkey.com/download/ahk-install.exe) — install it first.
 
-To install the program itself, head to the [Releases page](https://github.com/metroshica/Foxhole-AutoClicker/releases) on the right-hand side of this page. Download the most recent release, which will be a zip file named FoxholeAutoClicker. Drag the folder inside anywhere on your PC. To launch the GUI, double click the Foxhole AutoClicker file. 
+Then download the program from the [Releases page](https://github.com/metroshica/Foxhole-AutoClicker/releases) on the right-hand side of this page. Grab the most recent release — a zip file named `FoxholeAutoClicker` — and drag the folder inside anywhere on your PC. To launch the GUI, double-click the **Foxhole AutoClicker** file.
 
-# How to Use
-The program comes with default keybinds, but these can easily be changed by clicking the 'Change Keybinds' button in the program. Each row shows its current key on a button — click that key, then press the key/key combination of your choice (press **Esc** to cancel). Any modifiers or extra keys (shift, alt, mouse buttons, etc.) will work. The **Reset Defaults** button restores every bind to the defaults below.
+## Usage
 
-The default keybinds are:
-* **F2** - Spam left click at location (holds Shift)
-* **F3** - Hold W
-* **F4** - Hold S
-* **F5** - Left Click Building
-* **F6** - Hold Right Click
-* **F7** - Hold Left Click
-* **9** - Auto Arty Reloader
-* **0** - Auto Border Base Camping
-* **F9** - Suspend Hotkeys
-* **F10** - Exit Hotkeys
+Launch the GUI, then press **Start Hotkeys**. Use **Suspend Hotkeys** to pause them and **Close Hotkeys** to stop them entirely.
 
-Any changes to your keybinds are saved in the KeyBindings.ini file, and are saved between sessions. The keys will update upon restarting the hotkeys from the GUI. 
+### Default keybinds
 
-# Changelog
-Unreleased - **Spam Left Click (F2) now actually holds Shift in-game.** It presses a real Shift key for the whole spam and releases it on toggle-off (previously the game often ignored the held modifier); keep Foxhole focused while using it. **GUI redesign:** centered layout with grouped buttons, larger centered logo, bold title with version tag, the new logo as the window/tray icon, and the Maximize button disabled. **Change Keybinds page overhaul:** every bind shows its current key on a clickable "keycap" button that updates instantly when you rebind, pressing Esc now cancels a rebind (it used to blank the key), added a **Reset Defaults** button, and renamed "View Keybinds" to "Open Config File". Start/Suspend/Close now show a brief confirmation message.
+| Key | Action |
+| --- | --- |
+| `F2` | Spam Left Click at location (holds Shift) |
+| `F3` | Hold W |
+| `F4` | Hold S |
+| `F5` | Spam Left Building |
+| `F6` | Hold Right Click |
+| `F7` | Hold Left Click |
+| `9` | Auto Arty Reloader |
+| `0` | Auto Border Base Camping |
+| `F9` | Suspend Hotkeys |
+| `F10` | Exit Hotkeys |
 
-v2.0 - Added two new hotkeys: Auto Arty Reloader (default `9`, spams R + left click) and Auto Border Base Camping (default `0`, spams E), each with its own button in the Change Keybinds menu. New 2.0 logo. Note: these two hotkeys send to the focused window (keep Foxhole focused), unlike the tabbed-out hotkeys.
+### Changing keybinds
 
-v1.3 - F2 (Spam Left Click) now holds Shift while spamming. Hold W (F3) now also spams a configurable "Open Gate" key (default N) the whole time W is held, so gates open automatically as you run through - set the key with the GUI's "Set In-Game Open Gate Key (Hold W)" button or in `bin/KeyBindings.ini` under `[Keys] Open Gate Key`. All keybinds now fall back to their defaults if missing from the ini, so an old KeyBindings.ini won't break the hotkeys.
+Click **Change Keybinds** in the GUI. Each row shows its current key on a button — click that key, then press the key or key combination of your choice (press **Esc** to cancel). Modifiers and extra keys (Shift, Alt, mouse buttons, etc.) all work. **Reset Defaults** restores every bind to the defaults above.
 
-v1.2 - Now allows you to use the Shift key while W/S hotkeys are active, which was previously impossible. This means you can now type capital letters and more. Some shift key presses may miss, and the character will stop holding W/S for about half a second on tab out, but it is still a significant improvement.
+Changes are saved to `bin/KeyBindings.ini` and persist between sessions. Restart the hotkeys from the GUI for changes to take effect.
 
-v1.1 - Adds the "Spam Left Building" key. This key allows you to build with a hammer/shovel/etc without your character changing direction when your mouse moves.
+## Changelog
 
-v1.0 - Initial release.
+**Unreleased** - **Spam Left Click (F2) now actually holds Shift in-game.** It presses a real Shift key for the whole spam and releases it on toggle-off (previously the game often ignored the held modifier); keep Foxhole focused while using it. **GUI redesign:** centered layout with grouped buttons, larger centered logo, bold title with version tag, the new logo as the window/tray icon, and the Maximize button disabled. **Change Keybinds page overhaul:** every bind shows its current key on a clickable "keycap" button that updates instantly when you rebind, pressing Esc now cancels a rebind (it used to blank the key), added a **Reset Defaults** button, and renamed "View Keybinds" to "Open Config File". Start/Suspend/Close now show a brief confirmation message.
 
+**v2.0** - Added two new hotkeys: Auto Arty Reloader (default `9`, spams R + left click) and Auto Border Base Camping (default `0`, spams E), each with its own button in the Change Keybinds menu. New 2.0 logo. Note: these two hotkeys send to the focused window (keep Foxhole focused), unlike the tabbed-out hotkeys.
 
-# More Info/Troubleshooting
-* This entire program is essentially two AutoHotKey scripts - one for the GUI, and one for the Foxhole hotkeys. The GUI exists to set keybinds and start/stop the hotkeys easily. You can stop/suspend either script by finding them in system tray in the bottom right of your taskbar. 
+**v1.3** - F2 (Spam Left Click) now holds Shift while spamming. Hold W (F3) now also spams a configurable "Open Gate" key (default N) the whole time W is held, so gates open automatically as you run through - set the key with the GUI's "Set In-Game Open Gate Key (Hold W)" button or in `bin/KeyBindings.ini` under `[Keys] Open Gate Key`. All keybinds now fall back to their defaults if missing from the ini, so an old KeyBindings.ini won't break the hotkeys.
 
-* If you don't want to use the GUI after you've set your keybinds, the script for Foxhole is located in the \bin folder, and is called FoxholeHotkeys. You can simply double click this script to launch it, and can save to taskbar by `right click > create shortcut` for it. 
+**v1.2** - Now allows you to use the Shift key while W/S hotkeys are active, which was previously impossible. This means you can now type capital letters and more. Some shift key presses may miss, and the character will stop holding W/S for about half a second on tab out, but it is still a significant improvement.
 
-* If you are familiar with AutoHotKey, or don't want to bother with the GUI at all, there is a 'manual' version of the script in the \bin folder. You can `right click > edit with ...` the FoxholeHotkeysManual script to set keybinds manually. There are instructions in the comments of the script on how to do so.
+**v1.1** - Adds the "Spam Left Building" key. This key allows you to build with a hammer/shovel/etc without your character changing direction when your mouse moves.
 
-# Contact
-If you have any questions, issues, or feature requests, you can open an issue on this GitHub page.
+**v1.0** - Initial release.
 
-# Credits
+## Running without the GUI
+
+The program is essentially two AutoHotkey scripts — one for the GUI and one for the Foxhole hotkeys. The GUI just makes it easy to set keybinds and start/stop the hotkeys. You can stop or suspend either script from the system tray in the bottom-right of your taskbar.
+
+- **Skip the GUI:** the Foxhole hotkey script lives in the `bin` folder as `FoxholeHotkeys`. Double-click it to launch, or right-click → *Create shortcut* to pin it to your taskbar.
+- **Set keybinds by hand:** for AutoHotkey users, `bin/FoxholeHotkeysManual` is a manual version of the script. Right-click → *Edit* it to set keybinds directly; instructions are in the script's comments.
+
+## Troubleshooting
+
+- **A hotkey does nothing in-game.** Spam Left Click, Auto Arty Reloader, and Auto Border Base Camping send real input to the focused window — make sure Foxhole is focused when using them.
+- **Keybind changes aren't applied.** Restart the hotkeys from the GUI after changing a bind; changes only load on start.
+
+## Contact
+
+Have a question, bug, or feature request? [Open an issue](https://github.com/metroshica/Foxhole-AutoClicker/issues) on this repo.
+
+## Credits
+
 This is a fork of the original [Foxhole AutoClicker by Tommythebold](https://github.com/Tommythebold/Foxhole-AutoClicker). Big thanks to Tommythebold for creating and maintaining the original tool that this builds on.
