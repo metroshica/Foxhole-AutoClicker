@@ -1,22 +1,22 @@
-# Foxhole AutoClicker 2.0
+<div align="center">
 
-**AutoHotKey v1.1 (required) -> [Click Here to Download](https://www.autohotkey.com/download/ahk-install.exe)**
+<img src="bin/newlogo.png" alt="Foxhole AutoClicker logo" width="150">
 
-Foxhole AutoClicker is a program with hotkeys that work <ins>**while tabbed out**</ins>, meaning you can use your mouse and keyboard freely while they are active. These hotkeys are custom-made for Foxhole, and are single-action autoclickers that are allowed by the TOS.
+# Foxhole AutoClicker
 
-The following features are available:
-* **Spam left click at location -** (for pulling items/building). This hotkey simulates clicks at the coordinates where you pressed the hotkey on your Foxhole game window. **Holds the Shift key down** for the entire time it is spamming (for pulling full stacks, etc.), and releases it when you toggle the hotkey off. *(The Shift hold uses a real keypress, so keep Foxhole focused while using this hotkey.)*
-* **Hold W -** (to move forwards)
-* **Hold S -** (to move backwards)
-* **Hold Right Click -** (for rotating cranes/binos/aiming)
-* **Hold Left Click -** (for Harvesters/building)
-* **v1.1 - Spam Left Building -** (for building without character rotating)
-* **v1.3 - Hold W now also spams the Open Gate key** while W is held (default **N**) — so you open gates automatically as you run through them. Set the gate key on the **Change Keybinds** page by clicking the key next to **Open Gate (while Hold W)**, or edit `bin/KeyBindings.ini` under `[Keys]` → `Open Gate Key=` (any key, e.g. `n`, `g`, `space`). Restart the hotkeys after changing.
-* **v2.0 - Auto Arty Reloader (default `9`) -** spams reload (R) + left click to keep an artillery piece firing/reloading.
-* **v2.0 - Auto Border Base Camping (default `0`) -** spams E. *(These two send to the focused window, so keep Foxhole focused when using them.)*
+**Tabbed-out hotkeys for [Foxhole](https://www.foxholegame.com/) — single-action autoclickers that are allowed by the game's TOS.**
 
-  
-<img src="images/main-gui.png" alt="Main GUI" width="240"> &nbsp; <img src="images/change-keybinds.png" alt="Change Keybinds page" width="300">
+![Version](https://img.shields.io/badge/version-2.0-2d7dd2)
+&nbsp;
+![Platform](https://img.shields.io/badge/platform-Windows-0078d6?logo=windows&logoColor=white)
+&nbsp;
+![AutoHotkey](https://img.shields.io/badge/AutoHotkey-v1.1-334f6f)
+
+<img src="images/main-gui.png" alt="Main GUI" width="240">
+&nbsp;&nbsp;
+<img src="images/change-keybinds.png" alt="Change Keybinds page" width="300">
+
+</div>
 
 # How to Install
 This program requires you to install [AutoHotKey](https://www.autohotkey.com/) v1. 
