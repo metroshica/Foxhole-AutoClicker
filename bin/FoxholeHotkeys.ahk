@@ -80,12 +80,15 @@ Spam_Left:
 MouseGetPos, xpos, ypos
 T := !T
 if (T) {
-	; The game reads held-modifier state from the OS keyboard (GetAsyncKeyState),
-	; which a posted message does NOT update - so the Shift must be a REAL key
-	; event. To keep that Shift confined to Foxhole (and never leak into other
-	; programs while you tab out), only hold it while Foxhole is the active
-	; window; release it the instant focus leaves and re-press it on return.
-	; The shift-pull only registers while Foxhole is focused anyway.
+	; Clicks are POSTED to Foxhole's window, so they keep firing even after you tab
+	; away to another program (like the original autoclicker did). The Shift for
+	; pulling full stacks is the exception: the game reads held-Shift from the OS
+	; keyboard (GetAsyncKeyState), which only a REAL key event updates, so it must
+	; be physically held - and that would leak into whatever you tabbed to. So hold
+	; the real Shift (and set the click's Shift bit) ONLY while Foxhole is active;
+	; when you tab away, drop the Shift and keep plain-clicking.
+	; MK_LBUTTON=0x1, MK_SHIFT=0x4. ControlClick can't carry a modifier, so we
+	; PostMessage like the "Spam Left Building" feature does.
 	shiftDown := false
 	While (T) {
 		if WinActive("ahk_class UnrealWindow") {
@@ -93,15 +96,17 @@ if (T) {
 				Send {LShift down}
 				shiftDown := true
 			}
-			; Also set the Shift bit in wParam so the click itself carries the
-			; modifier. MK_LBUTTON=0x1, MK_SHIFT=0x4. ControlClick can't carry a
-			; modifier, so we PostMessage like the "Spam Left Building" feature does.
 			PostMessage, 0x200, 0x0004, (xpos & 0xFFFF) | (ypos << 16), , ahk_class UnrealWindow ; WM_MOUSEMOVE + Shift
 			PostMessage, 0x201, 0x0005, (xpos & 0xFFFF) | (ypos << 16), , ahk_class UnrealWindow ; WM_LBUTTONDOWN + Shift
 			PostMessage, 0x202, 0x0004, (xpos & 0xFFFF) | (ypos << 16), , ahk_class UnrealWindow ; WM_LBUTTONUP + Shift
-		} else if (shiftDown) {
-			Send {LShift up}
-			shiftDown := false
+		} else {
+			if (shiftDown) {
+				Send {LShift up}
+				shiftDown := false
+			}
+			PostMessage, 0x200, 0x0000, (xpos & 0xFFFF) | (ypos << 16), , ahk_class UnrealWindow ; WM_MOUSEMOVE
+			PostMessage, 0x201, 0x0001, (xpos & 0xFFFF) | (ypos << 16), , ahk_class UnrealWindow ; WM_LBUTTONDOWN
+			PostMessage, 0x202, 0x0000, (xpos & 0xFFFF) | (ypos << 16), , ahk_class UnrealWindow ; WM_LBUTTONUP
 		}
 		sleep, 100
 	}
