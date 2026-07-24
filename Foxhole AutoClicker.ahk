@@ -17,7 +17,7 @@ Gui, Font, s11 Bold, Verdana
 Gui, Add, Picture, x33 y10 w165 h165, bin\iconLarge.png
 Gui, Add, Text, x0 y182 w231 Center, Foxhole AutoClicker
 Gui, Font, s8 norm, Verdana
-Gui, Add, Text, x0 y205 w231 Center c808080, v2.0
+Gui, Add, Text, x0 y205 w231 Center c808080, v2.1.0
 Gui, Add, GroupBox, x22 y224 w187 h120, Controls
 Gui, Add, Button, x33 y246 w165 h26 gRunHotkey, Start Hotkeys
 Gui, Add, Button, x33 y+8 w165 h26 gSuspendHotkey, Suspend Hotkeys - %Suspend%
@@ -28,6 +28,8 @@ Gui, Add, Button, x33 y+8 w165 h26 gviewKeybinds, Open Config File
 Gui, Add, CheckBox, x33 y+16 gontop, Window Always on Top?
 Gui, Add, Link, x33 y+8, <a href="https://github.com/Tommythebold/Foxhole-AutoClicker">GitHub</a>
 Gui, Show, w231
+; Hover tooltips for the Change Keybinds rows (currently just Auto-Conc).
+OnMessage(0x200, "WM_MOUSEMOVE")
 return
 
 ChangeKeybindGUI:
@@ -40,6 +42,7 @@ ChangeKeybindGUI:
 	IniRead, curHoldLeft, bin\KeyBindings.ini, Hotkeys, Hold Left, F7
 	IniRead, curSpamLeft, bin\KeyBindings.ini, Hotkeys, Spam Left, F2
 	IniRead, curSpamBuild, bin\KeyBindings.ini, Hotkeys, Spam Left Build, F5
+	IniRead, curAutoConc, bin\KeyBindings.ini, Hotkeys, Auto Conc, \
 	IniRead, curArty, bin\KeyBindings.ini, Hotkeys, Auto Arty Reload, 9
 	IniRead, curBorder, bin\KeyBindings.ini, Hotkeys, Auto Border Base, 0
 	IniRead, curSuspend, bin\KeyBindings.ini, Hotkeys, Suspend, F9
@@ -57,7 +60,7 @@ ChangeKeybindGUI:
 	Gui, Keys:Add, Text, x0 y182 w310 Center, Change Keybinds
 	Gui, Keys:Font, s8 norm, Verdana
 	Gui, Keys:Add, Text, x0 y206 w310 Center c808080, Click a bind, then press a key. Esc cancels.
-	Gui, Keys:Add, GroupBox, x20 y228 w270 h356, Keybinds
+	Gui, Keys:Add, GroupBox, x20 y228 w270 h386, Keybinds
 
 	; action labels
 	Gui, Keys:Add, Text, x32 y250 w168 h24 +0x200, Hold W
@@ -67,10 +70,11 @@ ChangeKeybindGUI:
 	Gui, Keys:Add, Text, x32 y370 w168 h24 +0x200, Hold Left Click
 	Gui, Keys:Add, Text, x32 y400 w168 h24 +0x200, Spam Left + Shift
 	Gui, Keys:Add, Text, x32 y430 w168 h24 +0x200, Spam Left Building
-	Gui, Keys:Add, Text, x32 y460 w168 h24 +0x200, Auto Arty Reloader
-	Gui, Keys:Add, Text, x32 y490 w168 h24 +0x200, Auto Border Base Camping
-	Gui, Keys:Add, Text, x32 y520 w168 h24 +0x200, Suspend Hotkeys
-	Gui, Keys:Add, Text, x32 y550 w168 h24 +0x200, Close Hotkeys
+	Gui, Keys:Add, Text, x32 y460 w168 h24 +0x200 HwndhConcLbl, Auto-Conc
+	Gui, Keys:Add, Text, x32 y490 w168 h24 +0x200, Auto Arty Reloader
+	Gui, Keys:Add, Text, x32 y520 w168 h24 +0x200, Auto Border Base Camping
+	Gui, Keys:Add, Text, x32 y550 w168 h24 +0x200, Suspend Hotkeys
+	Gui, Keys:Add, Text, x32 y580 w168 h24 +0x200, Close Hotkeys
 
 	; keycap buttons (monospace) - click to rebind
 	Gui, Keys:Font, s10 Bold, Consolas
@@ -81,14 +85,15 @@ ChangeKeybindGUI:
 	Gui, Keys:Add, Button, x205 y370 w75 h24 vbindLeft gSetKeyLeft, %curHoldLeft%
 	Gui, Keys:Add, Button, x205 y400 w75 h24 vbindSpamLeft gSetKeySpamLeft, %curSpamLeft%
 	Gui, Keys:Add, Button, x205 y430 w75 h24 vbindSpamBuild gSetKeySpamLeftBuild, %curSpamBuild%
-	Gui, Keys:Add, Button, x205 y460 w75 h24 vbindArty gSetAutoArty, %curArty%
-	Gui, Keys:Add, Button, x205 y490 w75 h24 vbindBorder gSetAutoBorder, %curBorder%
-	Gui, Keys:Add, Button, x205 y520 w75 h24 vbindSuspend gSetKeySuspend, %curSuspend%
-	Gui, Keys:Add, Button, x205 y550 w75 h24 vbindClose gSetKeyClose, %curClose%
+	Gui, Keys:Add, Button, x205 y460 w75 h24 vbindAutoConc gSetAutoConc HwndhConcBtn, %curAutoConc%
+	Gui, Keys:Add, Button, x205 y490 w75 h24 vbindArty gSetAutoArty, %curArty%
+	Gui, Keys:Add, Button, x205 y520 w75 h24 vbindBorder gSetAutoBorder, %curBorder%
+	Gui, Keys:Add, Button, x205 y550 w75 h24 vbindSuspend gSetKeySuspend, %curSuspend%
+	Gui, Keys:Add, Button, x205 y580 w75 h24 vbindClose gSetKeyClose, %curClose%
 
 	Gui, Keys:Font, s8 norm, Verdana
-	Gui, Keys:Add, Button, x25 y600 w120 h28 gResetDefaults, Reset Defaults
-	Gui, Keys:Add, Button, x165 y600 w120 h28 gKeysDone, Done
+	Gui, Keys:Add, Button, x25 y630 w120 h28 gResetDefaults, Reset Defaults
+	Gui, Keys:Add, Button, x165 y630 w120 h28 gKeysDone, Done
 	Gui, Keys:Show, w310, Change Keybinds
 }
 return
@@ -105,6 +110,7 @@ ResetDefaults:
 	IniWrite, F7, bin\KeyBindings.ini, Hotkeys, Hold Left
 	IniWrite, F2, bin\KeyBindings.ini, Hotkeys, Spam Left
 	IniWrite, F5, bin\KeyBindings.ini, Hotkeys, Spam Left Build
+	IniWrite, \, bin\KeyBindings.ini, Hotkeys, Auto Conc
 	IniWrite, 9, bin\KeyBindings.ini, Hotkeys, Auto Arty Reload
 	IniWrite, 0, bin\KeyBindings.ini, Hotkeys, Auto Border Base
 	IniWrite, F9, bin\KeyBindings.ini, Hotkeys, Suspend
@@ -116,6 +122,7 @@ ResetDefaults:
 	GuiControl, Keys:, bindLeft, F7
 	GuiControl, Keys:, bindSpamLeft, F2
 	GuiControl, Keys:, bindSpamBuild, F5
+	GuiControl, Keys:, bindAutoConc, \
 	GuiControl, Keys:, bindArty, 9
 	GuiControl, Keys:, bindBorder, 0
 	GuiControl, Keys:, bindSuspend, F9
@@ -148,6 +155,17 @@ SetOpenGateKey:
 	{
 		IniWrite, %var1%, bin\KeyBindings.ini, Keys, Open Gate Key
 		GuiControl, Keys:, bindGate, %var1%
+	}
+}
+return
+
+SetAutoConc:
+{
+	var1 := KeyWaitCombo()
+	if (var1 != "")
+	{
+		IniWrite, %var1%, bin\KeyBindings.ini, Hotkeys, Auto Conc
+		GuiControl, Keys:, bindAutoConc, %var1%
 	}
 }
 return
@@ -253,6 +271,8 @@ return
 
 KeyWaitCombo(Options:="")
 {
+	global Capturing
+	Capturing := true   ; pause hover tooltips so they don't wipe the "Press a Key" prompt
 	ToolTip, Press a Key
 	SetTimer, RemoveToolTip, -5000
 
@@ -279,13 +299,42 @@ KeyWaitCombo(Options:="")
 	var := mods . ih.EndKey
 	if (ih.EndKey = "Escape")   ; Esc cancels the rebind without changing anything
 	{
+		Capturing := false
 		ToolTip
 		return ""
 	}
+	Capturing := false
 	ToolTip, Set to %var%
 	SetTimer, RemoveToolTip, -2000
 	return var
 }
+
+; Shows a tooltip while the mouse is over a Change Keybinds row that has help text.
+; A_GuiControl-based lookups are unreliable for our unnamed labels, so match on the
+; control HWND (captured via Hwnd... when the row was built). Fires for every window
+; of this process; only the Auto-Conc label/keycap have text, so nothing else reacts.
+WM_MOUSEMOVE(wParam, lParam)
+{
+	global hConcLbl, hConcBtn, Capturing
+	static prevHwnd := 0
+	if (Capturing)   ; a rebind is in progress - leave its prompt tooltip alone
+		return
+	MouseGetPos, , , , ctrlHwnd, 2
+	if (ctrlHwnd = prevHwnd)   ; still over the same control - nothing to change
+		return
+	prevHwnd := ctrlHwnd
+	ToolTip   ; moved to a different control: clear any existing tooltip first
+	SetTimer, ShowConcTip, Off
+	if (hConcLbl != "" && (ctrlHwnd = hConcLbl || ctrlHwnd = hConcBtn))
+		SetTimer, ShowConcTip, -350   ; short hover delay before showing
+	return
+}
+
+ShowConcTip:
+{
+	ToolTip, Automates submitting concrete to a building from a pallet.
+}
+return
 
 RemoveToolTip:
 {

@@ -16,6 +16,7 @@ CoordMode, Mouse, Client
 ; F3 - Hold W                                                ;
 ; F4 - Hold S                                                ;
 ; F5 - Hold Right Click                                      ;
+; \  - Auto-Conc (submit concrete to a building from pallet) ;
 ; F6 - Hold Left Click                                       ;
 ; F7 - Suspend Program                                       ;
 ; F9 - Exit Program                                          ;
@@ -39,6 +40,7 @@ IniRead, HoldLeft, KeyBindings.ini, Hotkeys, Hold Left, F7
 IniRead, HoldRight, KeyBindings.ini, Hotkeys, Hold Right, F6
 IniRead, SpamLeft, KeyBindings.ini, Hotkeys, Spam Left, F2
 IniRead, SpamLeftBuild, KeyBindings.ini, Hotkeys, Spam Left Build, F5
+IniRead, AutoConc, KeyBindings.ini, Hotkeys, Auto Conc, \
 IniRead, AutoArty, KeyBindings.ini, Hotkeys, Auto Arty Reload, 9
 IniRead, AutoBorder, KeyBindings.ini, Hotkeys, Auto Border Base, 0
 IniRead, Suspend, KeyBindings.ini, Hotkeys, Suspend, F9
@@ -62,6 +64,8 @@ if (SpamLeft != "")
 	Hotkey, *%SpamLeft%, Spam_Left
 if (SpamLeftBuild != "")
 	Hotkey, %SpamLeftBuild%, Spam_Left_Build
+if (AutoConc != "")
+	Hotkey, %AutoConc%, Auto_Conc
 if (AutoArty != "")
 	Hotkey, %AutoArty%, Auto_Arty_Reload
 if (AutoBorder != "")
@@ -125,6 +129,28 @@ While (T) {
 	PostMessage, 0x201, 0, cX&0xFFFF | cY<<16,, ahk_class UnrealWindow ; WM_LBUTTONDOWN  
   	PostMessage, 0x202, 0, cX&0xFFFF | cY<<16,, ahk_class UnrealWindow ; WM_LBUTTONUP  
 	sleep, 100
+}
+return
+
+;-----------;
+; Auto-Conc ;
+;-----------;
+; Automates submitting concrete to a building from a pallet: tap V to grab
+; concrete, wait for the pickup, then click to deposit, and repeat. Like Spam
+; Left Click, this works tabbed out - V is sent window-scoped via ControlSend and
+; the click is POSTED to Foxhole's window at the cursor position. Shares the same
+; toggle (T) as the other click-spam hotkeys, so only one runs at a time.
+
+Auto_Conc:
+MouseGetPos, xpos, ypos
+T := !T
+While (T) {
+	ControlSend,,{v}, ahk_class UnrealWindow
+	sleep, 850
+	PostMessage, 0x200, 0x0000, (xpos & 0xFFFF) | (ypos << 16), , ahk_class UnrealWindow ; WM_MOUSEMOVE
+	PostMessage, 0x201, 0x0001, (xpos & 0xFFFF) | (ypos << 16), , ahk_class UnrealWindow ; WM_LBUTTONDOWN
+	PostMessage, 0x202, 0x0000, (xpos & 0xFFFF) | (ypos << 16), , ahk_class UnrealWindow ; WM_LBUTTONUP
+	sleep, 650
 }
 return
 

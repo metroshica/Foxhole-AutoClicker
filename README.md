@@ -6,7 +6,7 @@
 
 **Tabbed-out hotkeys for [Foxhole](https://www.foxholegame.com/) — single-action autoclickers that are allowed by the game's TOS.**
 
-![Version](https://img.shields.io/badge/version-2.0-2d7dd2)
+![Version](https://img.shields.io/badge/version-2.1.0-2d7dd2)
 &nbsp;
 ![Platform](https://img.shields.io/badge/platform-Windows-0078d6?logo=windows&logoColor=white)
 &nbsp;
@@ -82,7 +82,7 @@ Changes are saved to `bin/KeyBindings.ini` and persist between sessions. Restart
 
 ## Changelog
 
-**Unreleased** - **Spam Left Click (F2) now actually holds Shift in-game.** It presses a real Shift key for the whole spam and releases it on toggle-off (previously the game often ignored the held modifier); keep Foxhole focused while using it. **GUI redesign:** centered layout with grouped buttons, larger centered logo, bold title with version tag, the new logo as the window/tray icon, and the Maximize button disabled. **Change Keybinds page overhaul:** every bind shows its current key on a clickable "keycap" button that updates instantly when you rebind, pressing Esc now cancels a rebind (it used to blank the key), added a **Reset Defaults** button, and renamed "View Keybinds" to "Open Config File". Start/Suspend/Close now show a brief confirmation message.
+**v2.1.0** - **New hotkey: Auto-Conc (default `\`)** — automates submitting concrete to a building from a pallet. It presses V, waits, left-clicks to deposit, and repeats; works tabbed out like the other click hotkeys, with a rebindable keycap and a hover tooltip in the Change Keybinds menu. **Spam Left Click (F2) now actually holds Shift in-game.** It presses a real Shift key for the whole spam and releases it on toggle-off (previously the game often ignored the held modifier); keep Foxhole focused while using it. **GUI redesign:** centered layout with grouped buttons, larger centered logo, bold title with version tag, the new logo as the window/tray icon, and the Maximize button disabled. **Change Keybinds page overhaul:** every bind shows its current key on a clickable "keycap" button that updates instantly when you rebind, pressing Esc now cancels a rebind (it used to blank the key), added a **Reset Defaults** button, and renamed "View Keybinds" to "Open Config File". Start/Suspend/Close now show a brief confirmation message.
 
 **v2.0** - Added two new hotkeys: Auto Arty Reloader (default `9`, spams R + left click) and Auto Border Base Camping (default `0`, spams E), each with its own button in the Change Keybinds menu. New 2.0 logo. Note: these two hotkeys send to the focused window (keep Foxhole focused), unlike the tabbed-out hotkeys.
 
