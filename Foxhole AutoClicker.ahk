@@ -263,7 +263,20 @@ KeyWaitCombo(Options:="")
     ih.KeyOpt("{LCtrl}{RCtrl}{LAlt}{RAlt}{LShift}{RShift}{LWin}{RWin}", "-E")
     ih.Start()
     ErrorLevel := ih.Wait()
-	var := ih.EndMods . ih.EndKey
+	; ih.EndMods uses left/right-specific codes ("<+" LShift, "<^" LCtrl, "<!" LAlt,
+	; "<#" LWin, and ">..." for the right-hand keys). Collapse them to plain,
+	; side-agnostic symbols so a combo reads cleanly (e.g. "^+e") instead of showing
+	; the raw "<"/">" prefixes on the button - and registers reliably as a hotkey.
+	mods := ""
+	if InStr(ih.EndMods, "^")
+		mods .= "^"
+	if InStr(ih.EndMods, "+")
+		mods .= "+"
+	if InStr(ih.EndMods, "!")
+		mods .= "!"
+	if InStr(ih.EndMods, "#")
+		mods .= "#"
+	var := mods . ih.EndKey
 	if (ih.EndKey = "Escape")   ; Esc cancels the rebind without changing anything
 	{
 		ToolTip
