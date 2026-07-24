@@ -82,54 +82,22 @@ T := !T
 if (T) {
 	; Hold Left Shift for the whole spam (for pulling full stacks) with a REAL key
 	; event - the game reads held-Shift from the OS keyboard (GetAsyncKeyState),
-	; which a posted message can't update. Clicks are POSTED to Foxhole's window, so
-	; both the clicks and the held Shift keep going even while you tab out.
-	;
-	; A physical Shift TAP toggles the hold off/on: while the spam is active we grab
-	; (and suppress) the real Shift key and use it purely as that toggle, so tapping
-	; it can never fight the synthetic hold. shiftKeyHeld ignores auto-repeat so one
-	; tap = one toggle. MK_LBUTTON=0x1, MK_SHIFT=0x4; ControlClick can't carry a
-	; modifier, so we PostMessage like the "Spam Left Building" feature does.
-	spamShiftHold := true
-	shiftKeyHeld := false
-	Hotkey, *LShift, Spam_ShiftDown, On
-	Hotkey, *LShift Up, Spam_ShiftUp, On
-	Send {LShift down}
-	shiftDown := true
+	; which a posted message can't update. Re-press it each pass if something (like
+	; a stray Shift tap) released it, so the hold never breaks until you toggle F2
+	; off. Clicks are POSTED to Foxhole's window, so the clicks and the held Shift
+	; both keep going even while you tab out. MK_LBUTTON=0x1, MK_SHIFT=0x4;
+	; ControlClick can't carry a modifier, so we PostMessage like "Spam Left
+	; Building" does.
 	While (T) {
-		if (spamShiftHold and !shiftDown) {
+		if (!GetKeyState("LShift"))
 			Send {LShift down}
-			shiftDown := true
-		} else if (!spamShiftHold and shiftDown) {
-			Send {LShift up}
-			shiftDown := false
-		}
-		moveW := shiftDown ? 0x0004 : 0x0000
-		downW := shiftDown ? 0x0005 : 0x0001
-		PostMessage, 0x200, moveW, (xpos & 0xFFFF) | (ypos << 16), , ahk_class UnrealWindow ; WM_MOUSEMOVE
-		PostMessage, 0x201, downW, (xpos & 0xFFFF) | (ypos << 16), , ahk_class UnrealWindow ; WM_LBUTTONDOWN
-		PostMessage, 0x202, moveW, (xpos & 0xFFFF) | (ypos << 16), , ahk_class UnrealWindow ; WM_LBUTTONUP
+		PostMessage, 0x200, 0x0004, (xpos & 0xFFFF) | (ypos << 16), , ahk_class UnrealWindow ; WM_MOUSEMOVE + Shift
+		PostMessage, 0x201, 0x0005, (xpos & 0xFFFF) | (ypos << 16), , ahk_class UnrealWindow ; WM_LBUTTONDOWN + Shift
+		PostMessage, 0x202, 0x0004, (xpos & 0xFFFF) | (ypos << 16), , ahk_class UnrealWindow ; WM_LBUTTONUP + Shift
 		sleep, 100
 	}
-	Hotkey, *LShift, Off
-	Hotkey, *LShift Up, Off
-	if (shiftDown)
-		Send {LShift up}
-	shiftDown := false
+	Send {LShift up}
 }
-return
-
-; Physical Shift while Spam Left Click is active: toggle the Shift-hold on/off.
-; These hotkeys only exist while the spam loop is running (enabled/disabled above).
-Spam_ShiftDown:
-if (!shiftKeyHeld) {
-	shiftKeyHeld := true
-	spamShiftHold := !spamShiftHold
-}
-return
-
-Spam_ShiftUp:
-shiftKeyHeld := false
 return
 
 ;-----------------;
