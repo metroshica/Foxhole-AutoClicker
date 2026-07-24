@@ -6,7 +6,7 @@ SetWorkingDir, %A_ScriptDir%
 IniRead, Suspend, bin\KeyBindings.ini, Hotkeys, Suspend
 IniRead, Close, bin\KeyBindings.ini, Hotkeys, Close
 
-Menu, Tray, Icon, bin\newlogo.ico  ; new logo for tray + window title-bar icon
+Menu, Tray, Icon, bin\icon.ico  ; logo for tray + window title-bar icon
 ; Fixed 210px-wide client so everything can be centered to it:
 ;   groupboxes x20 w170 (20px margin each side), buttons x30 w150 (centered),
 ;   logo x22 w165 (centered), title spans full width with Center.
@@ -14,7 +14,7 @@ Gui, New
 Gui, -MaximizeBox
 Gui, Margin, 20, 10
 Gui, Font, s11 Bold, Verdana
-Gui, Add, Picture, x22 y10 w165 h165, bin\newlogo.png
+Gui, Add, Picture, x22 y10 w165 h165, bin\iconLarge.png
 Gui, Add, Text, x0 y182 w210 Center, Foxhole AutoClicker
 Gui, Font, s8 norm, Verdana
 Gui, Add, Text, x0 y205 w210 Center c808080, v2.0
@@ -53,7 +53,7 @@ ChangeKeybindGUI:
 	Gui, Keys:-MaximizeBox
 	Gui, Keys:Margin, 20, 10
 	Gui, Keys:Font, s11 Bold, Verdana
-	Gui, Keys:Add, Picture, x72 y10 w165 h165, bin\newlogo.png
+	Gui, Keys:Add, Picture, x72 y10 w165 h165, bin\iconLarge.png
 	Gui, Keys:Add, Text, x0 y182 w310 Center, Change Keybinds
 	Gui, Keys:Font, s8 norm, Verdana
 	Gui, Keys:Add, Text, x0 y206 w310 Center c808080, Click a bind, then press a key. Esc cancels.

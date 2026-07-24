@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="bin/newlogo.png" alt="Foxhole AutoClicker logo" width="150">
+<img src="bin/iconLarge.png" alt="Foxhole AutoClicker logo" width="150">
 
 # Foxhole AutoClicker
 
