@@ -7,27 +7,27 @@ IniRead, Suspend, bin\KeyBindings.ini, Hotkeys, Suspend
 IniRead, Close, bin\KeyBindings.ini, Hotkeys, Close
 
 Menu, Tray, Icon, bin\icon.ico  ; logo for tray + window title-bar icon
-; Fixed 210px-wide client so everything can be centered to it:
-;   groupboxes x20 w170 (20px margin each side), buttons x30 w150 (centered),
-;   logo x22 w165 (centered), title spans full width with Center.
+; Fixed 231px-wide client so everything can be centered to it:
+;   groupboxes x22 w187 (22px margin each side), buttons x33 w165 (centered),
+;   logo x33 w165 (centered), title spans full width with Center.
 Gui, New
 Gui, -MaximizeBox
 Gui, Margin, 20, 10
 Gui, Font, s11 Bold, Verdana
-Gui, Add, Picture, x22 y10 w165 h165, bin\iconLarge.png
-Gui, Add, Text, x0 y182 w210 Center, Foxhole AutoClicker
+Gui, Add, Picture, x33 y10 w165 h165, bin\iconLarge.png
+Gui, Add, Text, x0 y182 w231 Center, Foxhole AutoClicker
 Gui, Font, s8 norm, Verdana
-Gui, Add, Text, x0 y205 w210 Center c808080, v2.0
-Gui, Add, GroupBox, x20 y224 w170 h120, Controls
-Gui, Add, Button, x30 y246 w150 h26 gRunHotkey, Start Hotkeys
-Gui, Add, Button, x30 y+8 w150 h26 gSuspendHotkey, Suspend Hotkeys - %Suspend%
-Gui, Add, Button, x30 y+8 w150 h26 gExitHotkey, Close Hotkeys - %Close%
-Gui, Add, GroupBox, x20 y354 w170 h88, KeyBinds
-Gui, Add, Button, x30 y376 w150 h26 gChangeKeybindGUI, Change Keybinds
-Gui, Add, Button, x30 y+8 w150 h26 gviewKeybinds, Open Config File
-Gui, Add, CheckBox, x30 y+16 gontop, Window Always on Top?
-Gui, Add, Link, x30 y+8, <a href="https://github.com/Tommythebold/Foxhole-AutoClicker">GitHub</a>
-Gui, Show, w210
+Gui, Add, Text, x0 y205 w231 Center c808080, v2.0
+Gui, Add, GroupBox, x22 y224 w187 h120, Controls
+Gui, Add, Button, x33 y246 w165 h26 gRunHotkey, Start Hotkeys
+Gui, Add, Button, x33 y+8 w165 h26 gSuspendHotkey, Suspend Hotkeys - %Suspend%
+Gui, Add, Button, x33 y+8 w165 h26 gExitHotkey, Close Hotkeys - %Close%
+Gui, Add, GroupBox, x22 y354 w187 h88, KeyBinds
+Gui, Add, Button, x33 y376 w165 h26 gChangeKeybindGUI, Change Keybinds
+Gui, Add, Button, x33 y+8 w165 h26 gviewKeybinds, Open Config File
+Gui, Add, CheckBox, x33 y+16 gontop, Window Always on Top?
+Gui, Add, Link, x33 y+8, <a href="https://github.com/Tommythebold/Foxhole-AutoClicker">GitHub</a>
+Gui, Show, w231
 return
 
 ChangeKeybindGUI:
