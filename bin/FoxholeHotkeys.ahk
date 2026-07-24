@@ -2,6 +2,12 @@
 #MaxThreadsPerHotkey 2
 SetWorkingDir, %A_ScriptDir%
 
+; Mouse coords relative to the target window's CLIENT area (not its outer frame).
+; Without this, the default "relative to active window" includes the title bar and
+; border, so in windowed mode every posted click lands offset by that frame and
+; misses - the clicks only worked because borderless/fullscreen has no frame.
+CoordMode, Mouse, Client
+
 ;------------------------------------------------------------;
 ; Foxhole Hotkeys - GUI Version - by Tommythebold            ;
 ;------------------------------------------------------------;
@@ -74,17 +80,19 @@ Spam_Left:
 MouseGetPos, xpos, ypos
 T := !T
 if (T) {
-	; Hold Left Shift down with a REAL key event (SendInput) for the whole spam
-	; loop. The game reads held-modifier state from the OS keyboard state
-	; (GetAsyncKeyState), which a posted ControlSend message does NOT update -
-	; so a real Send is required. NOTE: this means Foxhole must be focused for
-	; the Shift hold to register (the clicks themselves are still posted).
-	; Released when toggled off below.
+	; Hold Left Shift for the whole spam (for pulling full stacks) with a REAL,
+	; global key event - the game reads held-Shift from the OS keyboard
+	; (GetAsyncKeyState), which a window-scoped ControlSend can't drive. Because the
+	; Shift is global, it does affect other programs while the spam runs (e.g. typing
+	; elsewhere comes out capitalised) - that's an accepted trade-off for the pull to
+	; work while tabbed out. Shift is pressed once here and NOT re-asserted, so a
+	; single physical Shift tap releases it and turns the shift-hold off for the rest
+	; of the run (toggle F2 off/on to get it back). Clicks are POSTED to Foxhole's
+	; window, so they keep going tabbed out. MK_LBUTTON=0x1, MK_SHIFT=0x4;
+	; ControlClick can't carry a modifier, so we PostMessage like "Spam Left
+	; Building" does.
 	Send {LShift down}
 	While (T) {
-		; Also set the Shift bit in wParam so the click itself carries the
-		; modifier. MK_LBUTTON=0x1, MK_SHIFT=0x4. ControlClick can't carry a
-		; modifier, so we PostMessage like the "Spam Left Building" feature does.
 		PostMessage, 0x200, 0x0004, (xpos & 0xFFFF) | (ypos << 16), , ahk_class UnrealWindow ; WM_MOUSEMOVE + Shift
 		PostMessage, 0x201, 0x0005, (xpos & 0xFFFF) | (ypos << 16), , ahk_class UnrealWindow ; WM_LBUTTONDOWN + Shift
 		PostMessage, 0x202, 0x0004, (xpos & 0xFFFF) | (ypos << 16), , ahk_class UnrealWindow ; WM_LBUTTONUP + Shift
@@ -182,7 +190,21 @@ return
 ;-----------------;
 
 Key_Suspend:
-Suspend
+Suspend, Permit   ; keep this hotkey alive while suspended so it can un-suspend
+; Actually STOP everything: reset every toggle, kill the Hold timers, and release
+; any held keys. Plain Suspend only blocks future presses - it never interrupts a
+; loop already running, so the spamming/holding would otherwise continue.
+T := false
+toggle := false
+artyToggle := false
+borderToggle := false
+SetTimer, PressW, Off
+SetTimer, SpamGate, Off
+SetTimer, PressS, Off
+ControlSend,,{w up}, ahk_class UnrealWindow
+ControlSend,,{s up}, ahk_class UnrealWindow
+Send {LShift up}
+Suspend, Toggle
 return
 
 ;---------------;
@@ -190,6 +212,7 @@ return
 ;---------------;
 
 Key_Close:
+Suspend, Permit   ; let Close work even while the hotkeys are suspended
 ExitApp
 return
 
