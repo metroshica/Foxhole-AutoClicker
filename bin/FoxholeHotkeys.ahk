@@ -80,21 +80,25 @@ Spam_Left:
 MouseGetPos, xpos, ypos
 T := !T
 if (T) {
-	; Hold Shift on FOXHOLE'S window only, via ControlSend - the same mechanism Hold
-	; W/S use to work while tabbed out. This makes the game see Shift held for
-	; full-stack pulls WITHOUT changing the OS-wide Shift state, so other programs
-	; (Discord, etc.) never see Shift down. Re-assert it each pass to keep it held.
-	; Clicks are posted to Foxhole too, so both keep working while tabbed out.
+	; Hold Left Shift for the whole spam (for pulling full stacks) with a REAL,
+	; global key event - the game reads held-Shift from the OS keyboard
+	; (GetAsyncKeyState), which a window-scoped ControlSend can't drive. Because the
+	; Shift is global, it does affect other programs while the spam runs (e.g. typing
+	; elsewhere comes out capitalised) - that's an accepted trade-off for the pull to
+	; work while tabbed out. Re-press it each pass if something (like a stray Shift
+	; tap) released it, so the hold never breaks until you toggle F2 off. Clicks are
+	; POSTED to Foxhole's window, so clicks and Shift both keep going tabbed out.
 	; MK_LBUTTON=0x1, MK_SHIFT=0x4; ControlClick can't carry a modifier, so we
 	; PostMessage like "Spam Left Building" does.
 	While (T) {
-		ControlSend, , {LShift down}, ahk_class UnrealWindow
+		if (!GetKeyState("LShift"))
+			Send {LShift down}
 		PostMessage, 0x200, 0x0004, (xpos & 0xFFFF) | (ypos << 16), , ahk_class UnrealWindow ; WM_MOUSEMOVE + Shift
 		PostMessage, 0x201, 0x0005, (xpos & 0xFFFF) | (ypos << 16), , ahk_class UnrealWindow ; WM_LBUTTONDOWN + Shift
 		PostMessage, 0x202, 0x0004, (xpos & 0xFFFF) | (ypos << 16), , ahk_class UnrealWindow ; WM_LBUTTONUP + Shift
 		sleep, 100
 	}
-	ControlSend, , {LShift up}, ahk_class UnrealWindow
+	Send {LShift up}
 }
 return
 
@@ -199,7 +203,7 @@ SetTimer, SpamGate, Off
 SetTimer, PressS, Off
 ControlSend,,{w up}, ahk_class UnrealWindow
 ControlSend,,{s up}, ahk_class UnrealWindow
-ControlSend,,{LShift up}, ahk_class UnrealWindow
+Send {LShift up}
 Suspend, Toggle
 return
 
